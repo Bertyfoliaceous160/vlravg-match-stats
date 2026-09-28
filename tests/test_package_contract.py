@@ -206,9 +206,9 @@ def test_public_identity_and_entry_point() -> None:
     assert metadata["project"]["name"] == "limite-vllm"
     assert metadata["project"]["requires-python"] == "~=3.12.0"
     assert set(metadata["project"]["dependencies"]) == {
-        "vllm==0.26.0",
-        "torch==2.11.0",
-        "transformers==5.6.2",
+        "vllm>=0.26.0",
+        "torch>=2.11.0",
+        "transformers>=5.6.2",
     }
     assert metadata["project"]["entry-points"]["vllm.general_plugins"] == {
         "limite": "limite_vllm.register:register"
@@ -237,6 +237,9 @@ def test_default_lock_installs_the_cuda_runtime() -> None:
     assert torch_packages[0]["source"] == {
         "registry": "https://download.pytorch.org/whl/cu130"
     }
+    vllm_packages = [p for p in lock["package"] if p["name"] == "vllm"]
+    assert len(vllm_packages) == 1
+    assert vllm_packages[0]["version"] == "0.26.0"
 
 
 def test_plugin_registration_is_idempotent(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -266,19 +269,6 @@ def test_plugin_registration_is_idempotent(monkeypatch: pytest.MonkeyPatch) -> N
     architecture, model = Registry.registrations[0]
     assert architecture == "LimiteForCausalLM"
     assert model.__name__ == "LimiteForCausalLM"
-
-
-def test_vllm_version_guard_accepts_build_suffixes_and_rejects_other_releases(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    from limite_vllm import register
-
-    monkeypatch.setattr(register, "package_version", lambda _name: "0.26.0+cu129")
-    register._validate_vllm_version()
-
-    monkeypatch.setattr(register, "package_version", lambda _name: "0.27.0")
-    with pytest.raises(RuntimeError, match=r"supports vLLM 0\.26\.0; found 0\.27\.0"):
-        register._validate_vllm_version()
 
 
 def test_configuration_is_self_contained_and_uses_limite_identity() -> None:

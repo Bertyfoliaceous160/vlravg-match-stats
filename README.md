@@ -22,6 +22,10 @@
 
 **Python 3.12 · vLLM 0.26.0 · PyTorch 2.11.0 (CUDA 13.0) · Transformers 5.6.2**
 
+This is the fully tested default, fixed by `uv.lock`. The package also allows
+newer runtime versions; some later combinations have had light testing but are
+not part of the verified default.
+
 On Linux x86-64 with an NVIDIA GPU and a CUDA 13.0-compatible NVIDIA driver,
 install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run:
 
@@ -71,8 +75,8 @@ Send the mathematical problem as a user message and use the checkpoint's bundled
 
 ### Install only the plugin
 
-If you already manage a Python 3.12 environment with vLLM 0.26.0 and its
-compatible GPU stack, build the plugin wheel from this checkout and install it
+If you already manage a Python 3.12 environment with vLLM and a compatible
+GPU stack, build the plugin wheel from this checkout and install it
 without resolving dependencies. Activate that environment first so `python` and
 `vllm` refer to its executables:
 
@@ -129,7 +133,7 @@ there is no competing CPU-only PyTorch installation. Package tests use vLLM
 stubs and do not replace an actual GPU serving check.
 
 Explore other vLLM versions in separate environments or branches. They are not
-part of this verified default, and the plugin currently checks for vLLM 0.26.0.
+part of the verified default, but the plugin does not reject them by version.
 
 The implementation lives in `src/limite_vllm`.
 

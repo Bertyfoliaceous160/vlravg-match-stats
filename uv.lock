@@ -1045,9 +1045,9 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "torch", specifier = "==2.11.0", index = "https://download.pytorch.org/whl/cu130" },
-    { name = "transformers", specifier = "==5.6.2" },
-    { name = "vllm", specifier = "==0.26.0" },
+    { name = "torch", specifier = ">=2.11.0", index = "https://download.pytorch.org/whl/cu130" },
+    { name = "transformers", specifier = ">=5.6.2" },
+    { name = "vllm", specifier = ">=0.26.0" },
 ]
 
 [package.metadata.requires-dev]
