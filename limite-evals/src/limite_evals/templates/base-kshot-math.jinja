@@ -1,0 +1,14 @@
+{{ bos_token }}{% raw %}Problem: Compute 1+1.
+Solution: We have 1+1=2, so the answer is \boxed{2}.
+
+Problem: Solve for x: 2x+3=11.
+Solution: Subtracting 3 gives 2x=8, hence x=4. The answer is \boxed{4}.
+
+Problem: What is the area of a rectangle with side lengths 6 and 7?
+Solution: The area is 6\cdot 7=42. The answer is \boxed{42}.
+
+Problem: If a triangle has angles 30^\circ and 60^\circ, what is the third angle?
+Solution: Angles in a triangle sum to 180^\circ, so the third angle is 90^\circ. The answer is \boxed{90}.
+
+{% endraw %}{% for message in messages %}{% if message['role'] == 'user' %}Problem: {{ message['content'] }}
+Solution:{% endif %}{% endfor %}

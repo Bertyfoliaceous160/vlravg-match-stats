@@ -1,0 +1,178 @@
+[project]
+name = "limite-evals"
+version = "0.1.0"
+description = "Pinned mathematical evaluation pipeline for Limite checkpoints"
+readme = "README.md"
+requires-python = "~=3.12.0"
+dependencies = [
+    "datasets>=5.0.1",
+    "limite-evals-core",
+    "httpx>=0.27",
+    "huggingface-hub>=1.26.1",
+    "jinja2>=3.1",
+    "matplotlib>=3.9",
+    "pandas>=2.0",
+    "rich>=14.0",
+    # `verifiers` pinned to the commit prime-rl carries as a submodule.
+    # See docs/contract.md, decision 2.
+    "verifiers",
+    # The parent project registers LimiteForCausalLM in every vLLM worker.
+    "limite-vllm ; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    # vLLM 0.28.0 retains the mapped GDN convolution shard id on each source
+    # tensor but does not forward it to the fused parameter's custom loader.
+    # This companion plugin forwards those ids explicitly and leaves every
+    # other native load path untouched.
+    "olmo-hybrid-vllm-plugin",
+    # Markered because the wheel below exists only for linux x86_64, which is
+    # also the only shape that ever serves. Without the marker a laptop or a
+    # CPU-only runner could not resolve the scoring core at all.
+    "vllm==0.28.0 ; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    # The torch trio arrives through vLLM and would never be named here on its
+    # own. It is named because `[tool.uv.sources]` reaches direct requirements
+    # only, and routing these three to the compatible CUDA index is the point --
+    # see the comment on that source entry. Deliberately unversioned: vLLM's own
+    # requirement fixes the version, and a second pin here would be a place for
+    # the two to silently disagree.
+    "torch ; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "torchvision ; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "torchaudio ; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "pylatexenc>=2.11",
+    "antlr4-python3-runtime==4.11.0",
+    "numpy>=2.3.5",
+    "sympy>=1.14.0",
+    "latex2sympy2-extended>=1.11.0",
+]
+
+[project.scripts]
+limite-eval = "limite_evals.cli:main"
+limite-rescore = "limite_evals.rescore:main"
+limite-collect = "limite_evals.collect:main"
+limite-compare = "limite_evals.compare:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4",
+    "pytest-asyncio>=1.4.0",
+    "ruff>=0.12",
+]
+
+# Why this repository constrains a CUDA support library at all. D-102 gave up
+# what contract decision 5 bought -- one lockfile deciding which kernels stand
+# behind both an offline number and an in-flight RL number -- and replaced it
+# with a version pin plus the fatal assertion in `serve`. That trade is only
+# worth what it pins. torch, torchvision, torchaudio, vLLM and triton are held
+# by the index and URL pins above; this holds one of the support libraries that
+# sits under them, so that a number reported here comes off the same kernel
+# build as the rollouts it is meant to be comparable with. The version named is
+# the one the serving path resolves today, read out of that path's own lock and
+# restated here with this repository's reason, not imported as policy.
+#
+# Only one of the four packages that diverge can be held this way, and that
+# asymmetry belongs next to the constraint rather than only in the register.
+# `nvidia-cudnn-frontend` is a range requirement -- vLLM asks for >=1.19.1 --
+# so naming a version inside the range is an ordinary pin and costs nothing.
+# The other three are exact equalities the wheels declare about themselves:
+# The vLLM wheel requires Torch 2.13.0 and `nvidia-cutlass-dsl`; those wheels
+# pin their own CUDA support packages. Moving any of them needs an
+# `override-dependencies` entry that discards a wheel's own declaration and
+# serves it a support library it never asked for -- which buys the opposite of
+# the safety a pin is for. They stay where their declaring wheel puts them and
+# the divergence stays recorded (D-111).
+[tool.uv]
+constraint-dependencies = ["nvidia-cudnn-frontend==1.26.0"]
+# vLLM 0.28 caps setuptools below 81 for Triton on Python 3.12. Its compiled
+# generation path passed on Kyoto with patched setuptools 84 (GHSA-h35f-9h28-mq5c).
+override-dependencies = ["setuptools>=83.0.0"]
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+limite-evals-core = { workspace = true }
+limite-vllm = { path = ".." }
+olmo-hybrid-vllm-plugin = { workspace = true }
+verifiers = { git = "https://github.com/PrimeIntellect-ai/verifiers.git", rev = "d30a3f48e5f14b06b3081b2102ec32cc3149b849" }
+# The serving build is pinned by URL rather than by version range: the
+# `+cu129` local segment names the CUDA build, and taking PyPI's default one
+# instead would put a different set of kernels behind a number this repository
+# reports as comparable with an in-flight one.
+vllm = [
+    { url = "https://github.com/vllm-project/vllm/releases/download/v0.28.0/vllm-0.28.0+cu129-cp38-abi3-manylinux_2_28_x86_64.whl", marker = "platform_machine == 'x86_64'" },
+]
+# Why this repository pins an index at all. The vLLM 0.28.0 CUDA 12.9 wheel
+# requires Torch 2.13.0; the official CUDA 13.0 PyTorch index is the matching
+# source that publishes that release for Python 3.12. Leaving Torch to an
+# implicit resolver would put an unrecorded kernel build behind the score.
+# torchvision and torchaudio follow it because vLLM imports both and a
+# mixed-build trio fails on symbols rather than on numbers.
+torch = { index = "pytorch-cu130" }
+torchvision = { index = "pytorch-cu130" }
+torchaudio = { index = "pytorch-cu130" }
+
+# `explicit` so the index serves only the three packages that name it above and
+# never becomes a second place the rest of the tree could be resolved from.
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[tool.ruff]
+line-length = 110
+force-exclude = true
+extend-exclude = [
+    "packages/limite-evals-core/src/limite_evals_core/protocols.py",
+    "packages/limite-evals-core/src/limite_evals_core/published/vendor/eth_sri_matharena__src__matharena__grader.py",
+    "packages/limite-evals-core/src/limite_evals_core/published/vendor/eth_sri_matharena__src__matharena__parse_manual.py",
+    "packages/limite-evals-core/src/limite_evals_core/published/vendor/eth_sri_matharena__src__matharena__parser.py",
+    "packages/limite-evals-core/src/limite_evals_core/published/vendor/eth_sri_matharena__src__matharena__utils.py",
+    "packages/limite-evals-core/src/limite_evals_core/published/vendor/hendrycks_math__modeling__dataset__util.py",
+    "packages/limite-evals-core/src/limite_evals_core/published/vendor/hendrycks_math__modeling__eval_math_gpt.py",
+    "packages/limite-evals-core/src/limite_evals_core/published/vendor/hendrycks_math__modeling__math_equivalence.py",
+    "packages/limite-evals-core/src/limite_evals_core/published/vendor/openai_prm800k__prm800k__grading__grader.py",
+    "packages/limite-evals-core/src/limite_evals_core/published/vendor/openai_prm800k__prm800k__grading__math_normalize.py",
+    "packages/limite-evals-core/src/limite_evals_core/schema.py",
+    "packages/olmo-hybrid-vllm-plugin/src/olmo_hybrid_vllm/patch.py",
+    "src/limite_evals/aggregate.py",
+    "src/limite_evals/cli.py",
+    "src/limite_evals/collect.py",
+    "src/limite_evals/profiles.py",
+    "src/limite_evals/report.py",
+    "src/limite_evals/rescore.py",
+    "src/limite_evals/runner.py",
+    "src/limite_evals/serve.py",
+    "src/limite_evals/suites.py",
+    "src/limite_evals/tasksets.py",
+    "src/limite_evals/taxonomy.py",
+    "tests/test_aggregate.py",
+    "tests/test_collect.py",
+    "tests/test_compare.py",
+    "tests/test_comparison_timeout.py",
+    "tests/test_exact_parity.py",
+    "tests/test_ladder.py",
+    "tests/test_math_extended.py",
+    "tests/test_olmo_hybrid_vllm_plugin.py",
+    "tests/test_profiles_and_suites.py",
+    "tests/test_protocols.py",
+    "tests/test_rescore.py",
+    "tests/test_schema.py",
+    "tests/test_taxonomy.py",
+    "tests/test_templates.py",
+]
+
+[tool.ruff.lint]
+select = ["F", "I"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["limite_evals", "limite_evals_core", "limite_vllm"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+asyncio_mode = "auto"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/limite_evals"]

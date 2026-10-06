@@ -52,6 +52,25 @@ VLLM_PLUGINS=limite uv run --locked vllm serve paradigma-inc/limite-1b-violetto
 
 **Sampling settings:** We recommend `temperature=0.6` and `top_p=0.95`. These defaults are included in [`generation_config.json`](https://huggingface.co/paradigma-inc/limite-1b-violetto/blob/main/generation_config.json) and are loaded automatically by the vLLM command above. Explicit request parameters override these defaults, so set both values explicitly if your client supplies its own sampling settings.
 
+The server exposes vLLM's OpenAI-compatible API at
+`http://localhost:8000/v1`. Send chat requests to
+`POST /v1/chat/completions`; no Limite-specific client is required:
+
+```bash
+curl http://localhost:8000/v1/chat/completions \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "model": "paradigma-inc/limite-1b-violetto",
+    "messages": [
+      {"role": "user", "content": "Solve 2x + 3 = 11."}
+    ]
+  }'
+```
+
+This request deliberately omits sampling fields and therefore uses the
+checkpoint defaults above. Clients that populate their own defaults should
+send `temperature=0.6` and `top_p=0.95` explicitly.
+
 For other Limite checkpoints, use:
 
 ```bash
@@ -94,6 +113,39 @@ this path, since it manages the complete runtime described in the quickstart.
 The CUDA wheel source and lockfile are repository-level uv settings, not wheel
 metadata; installing the package as a dependency of another project does not
 inherit them.
+
+## Reproducing evaluations
+
+The evaluator is a separate package under [`limite-evals/`](limite-evals/). It
+uses its own locked environment, starts the Limite vLLM plugin itself, downloads
+or reuses immutable Hugging Face snapshots, and writes each run under
+`outputs/eval/<run-id>/` by default. Allocate a compatible NVIDIA GPU using your
+machine or scheduler, then install the evaluator:
+
+```bash
+cd limite-evals
+uv sync --locked
+```
+
+Run the complete pinned `math-extended` suite with its declared defaults:
+
+```bash
+uv run --locked limite-eval paradigma-inc/limite-1b-violetto \
+  --run-id violetto-math-extended
+```
+
+`--run-id` is an optional user-chosen label for the output directory. Omit it
+to generate a timestamped id automatically. Every run writes to a new directory
+and never overwrites an existing one.
+
+Replace the model id with `paradigma-inc/limite-1b-base` or
+`paradigma-inc/limite-1b-base-soup` to evaluate the other Limite releases. The
+checkpoint allowlist selects `posttrain`/`chat` for Violetto and
+`pretrain`/`base-kshot` for Base and Base Soup. The default sampling seed is
+`0`; model revisions, rendering hashes, dataset revisions, sampling settings,
+engine details, scores, and diagnostics are recorded with the run. See the
+[evaluator README](limite-evals/README.md) and `uv run limite-eval --help` for
+the complete contract and option reference.
 
 ## About the model
 

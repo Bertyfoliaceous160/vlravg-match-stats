@@ -1,0 +1,38 @@
+{
+  "source": "Limite-Pretrain export/eval_fixed.py GSM8K_EXEMPLARS, with answer markers adapted to the current boxed contract",
+  "note": "Problems and reasoning are preserved; each retired `#### N` suffix is replaced by the equivalent \\boxed{N} required by the current GSM8K prompt and scorer.",
+  "exemplars": [
+    {
+      "problem": "There are 15 trees in the grove. Grove workers will plant trees in the grove today. After they are done, there will be 21 trees. How many trees did the grove workers plant today?",
+      "solution": "There are 21 - 15 = 6 trees. \\boxed{6}"
+    },
+    {
+      "problem": "If there are 3 cars in the parking lot and 2 more cars arrive, how many cars are in the parking lot?",
+      "solution": "There are 3 + 2 = 5 cars. \\boxed{5}"
+    },
+    {
+      "problem": "Leah had 32 chocolates and her sister had 42. If they ate 35, how many pieces do they have left in total?",
+      "solution": "They started with 32 + 42 = 74 chocolates. They have 74 - 35 = 39 left. \\boxed{39}"
+    },
+    {
+      "problem": "Jason had 20 lollipops. He gave some to Denny. Now Jason has 12 lollipops. How many did he give to Denny?",
+      "solution": "Jason gave away 20 - 12 = 8 lollipops. \\boxed{8}"
+    },
+    {
+      "problem": "Shawn has five toys. For Christmas, he got two toys from his mom and two from his dad. How many toys does he have now?",
+      "solution": "Shawn has 5 + 2 + 2 = 9 toys. \\boxed{9}"
+    },
+    {
+      "problem": "Michael had 58 golf balls. On Tuesday, he lost 23 golf balls. On Wednesday, he lost 2 more. How many golf balls did he have at the end of Wednesday?",
+      "solution": "Michael had 58 - 23 - 2 = 33 golf balls. \\boxed{33}"
+    },
+    {
+      "problem": "Olivia has $23. She bought five bagels for $3 each. How much money does she have left?",
+      "solution": "The bagels cost 5 * 3 = 15 dollars. Olivia has 23 - 15 = 8 dollars left. \\boxed{8}"
+    },
+    {
+      "problem": "When I was 6 my sister was half my age. Now I am 70. How old is my sister?",
+      "solution": "My sister is 3 years younger than me, so she is 70 - 3 = 67. \\boxed{67}"
+    }
+  ]
+}

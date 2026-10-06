@@ -1,0 +1,11 @@
+# Vendored third-party sources, kept byte-identical to the upstream revision
+# recorded in PROVENANCE.md. Linting must not apply here: every rule ruff could
+# fix -- an unused import, a bare `except`, an invalid escape -- is part of the
+# published bytes, and fixing one would break the digest that
+# tests/test_exact_parity.py asserts. That digest is the entire claim this
+# directory makes.
+exclude = ["*.py"]
+force-exclude = true
+
+[lint]
+select = []
