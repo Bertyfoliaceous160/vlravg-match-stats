@@ -340,7 +340,7 @@ class _AttentionBase(nn.Module):
         with `.view(())` to stay on this path. Anything here that turned
         `qkv_scale` into shape `(1,)` would silently switch the fold to fp32 and
         diverge from both the oracle and the trainer, with no error and no
-        shape mismatch. `tests/test_limite_vllm_model.py` pins it.
+        shape mismatch.
         """
         return (scale.to(weight.dtype) * weight)
 

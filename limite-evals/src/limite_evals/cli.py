@@ -120,8 +120,7 @@ from limite_evals_core.schema import (
 #: The revisions used by the evaluation contract. Transcribed rather
 #: than read from the environment: they identify what produced a number, so a manifest has to
 #: carry them even when this repository is installed as a wheel. The `verifiers`
-#: value is checked against `[tool.uv.sources]` by `tests/test_cli.py`, which is
-#: what keeps it from drifting away from what is actually installed.
+#: value must match the revision in `[tool.uv.sources]` in `pyproject.toml`.
 VERIFIERS_PIN = "d30a3f48e5f14b06b3081b2102ec32cc3149b849"
 RESEARCH_ENVIRONMENTS_PIN = "f9c43a74"
 

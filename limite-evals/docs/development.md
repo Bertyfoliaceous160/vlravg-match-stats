@@ -1,6 +1,6 @@
 # Development
 
-Read the root and repository-local `AGENTS.md` files before changing code.
+Read the evaluator's [`AGENTS.md`](../AGENTS.md) before changing code.
 Dependency management uses `uv`; `pyproject.toml` is the source of truth and
 `uv.lock` must be regenerated whenever dependencies change.
 
